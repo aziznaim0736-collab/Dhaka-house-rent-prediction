@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dhaka House Rent Predictor</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f3f6f9; margin: 0; padding: 24px; }
+    .card { max-width: 420px; margin: 30px auto; background: #fff; padding: 24px;
+            border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    h1 { font-size: 22px; margin-top: 0; color: #1d3557; }
+    label { display: block; margin: 14px 0 4px; font-size: 14px; color: #333; }
+    select, input { width: 100%; padding: 10px; border: 1px solid #ccd; border-radius: 8px;
+                    font-size: 15px; box-sizing: border-box; }
+    button { margin-top: 20px; width: 100%; padding: 12px; background: #2a6f97; color: #fff;
+             border: 0; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    .result { margin-top: 20px; padding: 14px; background: #e8f4ea; border-radius: 8px;
+              font-size: 18px; text-align: center; color: #1b5e20; }
+    .error { margin-top: 20px; padding: 12px; background: #fdecea; border-radius: 8px; color: #b71c1c; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Dhaka House Rent Predictor</h1>
+    <form method="POST">
+      <label>Area</label>
+      <select name="area_name" required>
+        {% for a in areas %}
+        <option value="{{ a }}" {% if form.get('area_name') == a %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Size (sqft)</label>
+      <input type="text" name="size" value="{{ form.get('size', '1000') }}" required>
+
+      <label>Bedrooms</label>
+      <input type="number" name="bed" min="1" max="6" value="{{ form.get('bed', '2') }}" required>
+
+      <label>Bathrooms</label>
+      <input type="number" name="bath" min="1" max="7" value="{{ form.get('bath', '2') }}" required>
+
+      <button type="submit">Predict Rent</button>
+    </form>
+
+    {% if result %}
+      <div class="result">Estimated rent: <b>{{ "{:,}".format(result) }} BDT / month</b></div>
+    {% endif %}
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+  </div>
+</body>
+</html>
